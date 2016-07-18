@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require "seo_report"
+
+url = ARGV[0]
+if url.nil? || url.empty?
+  abort("Please provide a url to seo-report.\nUsage: seo-report URL")
+else
+  SeoReport::Representation::Cli.represent_with_report_for(url)
+end

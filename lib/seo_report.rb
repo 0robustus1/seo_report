@@ -5,3 +5,4 @@ end
 
 require "seo_report/request"
 require "seo_report/report"
+require "seo_report/representation"
