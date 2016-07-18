@@ -1,5 +1,7 @@
 require "seo_report/version"
 
 module SeoReport
-  # Your code goes here...
 end
+
+require "seo_report/request"
+require "seo_report/report"
