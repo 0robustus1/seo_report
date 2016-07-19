@@ -23,6 +23,7 @@ module SeoReport::Representation
       end
     end
 
+    protected
     def provide_html_response
       r = report.report
       canonical =
@@ -34,10 +35,7 @@ module SeoReport::Representation
       puts "#{white_color('Canonical: ')}#{canonical}"
       puts "#{white_color('Title: ')}#{r[:title]}"
       puts "#{white_color('Description: ')}#{r[:description]}"
-      puts "#{white_color('Robots: ')}"
-      r[:robots].each do |robot_tag|
-        puts "  - #{robot_tag}"
-      end
+      provide_robots_response
       provide_twitter_response
       provide_opengraph_response
     end
@@ -51,6 +49,23 @@ module SeoReport::Representation
           r[:location]
         end
       puts "#{white_color('Location: ')}#{location}"
+    end
+
+    def provide_robots_response
+      r = report.report[:robots]
+      tags = r.map(&:downcase)
+      literal_tags = r.dup
+      puts "#{white_color('Robots: ')}"
+      no_robots_tag = tags.find { |t| t.match(/.*no(?:index|follow).*/) }
+      if !tags.include?("all") && no_robots_tag
+        literal_tags.delete_at(tags.find_index(no_robots_tag))
+        puts "  - #{red_color(no_robots_tag, bold: true)}"
+      elsif !tags.include?("all") && !tags.any? { |t| t.match(/index|follow/) }
+        puts "  - index, follow (#{white_color('default')})"
+      end
+      literal_tags.each do |robot_tag|
+        puts "  - #{robot_tag}"
+      end
     end
 
     def provide_twitter_response
@@ -73,7 +88,6 @@ module SeoReport::Representation
       puts "  #{white_color('image: ')}#{r[:image]}"
     end
 
-    protected
     def white(text, io = $stdout)
       io.print(white_color(text))
     end
