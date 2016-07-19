@@ -1,10 +1,22 @@
 #!/usr/bin/env ruby
 
 require "seo_report"
+require "getoptlong"
+
+options = GetoptLong.new(
+  ["--json", GetoptLong::NO_ARGUMENT],
+  ["--help", "-h", GetoptLong::NO_ARGUMENT])
+
+opts = {}
+options.each { |opt, val| opts[opt] = val }
 
 url = ARGV[0]
 if url.nil? || url.empty?
   abort("Please provide a url to seo-report.\nUsage: seo-report URL")
 else
-  SeoReport::Representation::Cli.represent_with_report_for(url)
+  if opts["--json"]
+    SeoReport::Representation::Json.represent_with_report_for(url)
+  else
+    SeoReport::Representation::Cli.represent_with_report_for(url)
+  end
 end

@@ -1,17 +1,5 @@
 module SeoReport::Representation
-  class Cli
-    attr_reader :report
-
-    def self.represent_with_report_for(url)
-      report = SeoReport::Report.new(url)
-      report.produce
-      new(report).represent
-    end
-
-    def initialize(report)
-      @report = report
-    end
-
+  class Cli < Base
     def represent
       r = report.report
       puts "#{white_color('URL: ')}#{r[:request_url]}"
