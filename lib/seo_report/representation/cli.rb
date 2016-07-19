@@ -16,25 +16,61 @@ module SeoReport::Representation
       r = report.report
       puts "#{white_color('URL: ')}#{r[:request_url]}"
       puts "#{white_color('Status: ')}#{color_for_code(r[:response_code])}"
+      if r[:response_code] == 200
+        provide_html_response
+      elsif r[:response_code] >= 300 && r[:response_code] < 400
+        provide_redirection_response
+      end
+    end
+
+    def provide_html_response
+      r = report.report
       canonical =
         if r[:canonical] == r[:request_url]
           green_color(r[:canonical], bold: true)
         else
           red_color(r[:canonical], bold: true)
         end
-      if r[:response_code] == 200
-        puts "#{white_color('Canonical: ')}#{canonical}"
-        puts "#{white_color('Title: ')}#{r[:title]}"
-        puts "#{white_color('Description: ')}#{r[:description]}"
-      elsif r[:response_code] >= 300 && r[:response_code] < 400
-        location =
-          if r[:location] == r[:request_url]
-            red_color(r[:location], bold: true)
-          else
-            r[:location]
-          end
-        puts "#{white_color('Location: ')}#{location}"
+      puts "#{white_color('Canonical: ')}#{canonical}"
+      puts "#{white_color('Title: ')}#{r[:title]}"
+      puts "#{white_color('Description: ')}#{r[:description]}"
+      puts "#{white_color('Robots: ')}"
+      r[:robots].each do |robot_tag|
+        puts "  - #{robot_tag}"
       end
+      provide_twitter_response
+      provide_opengraph_response
+    end
+
+    def provide_redirection_response
+      r = report.report
+      location =
+        if r[:location] == r[:request_url]
+          red_color(r[:location], bold: true)
+        else
+          r[:location]
+        end
+      puts "#{white_color('Location: ')}#{location}"
+    end
+
+    def provide_twitter_response
+      r = report.report[:twitter]
+      puts "#{white_color('Twitter-Card: ')}"
+      puts "  #{white_color('Card: ')}#{r[:card]}"
+      puts "  #{white_color('Domain: ')}#{r[:domain]}"
+      puts "  #{white_color('Title: ')}#{r[:title]}"
+      puts "  #{white_color('Description: ')}#{r[:description]}"
+    end
+
+    def provide_opengraph_response
+      r = report.report[:og]
+      puts "#{white_color('OpenGraph (Facebook): ')}"
+      puts "  #{white_color('type: ')}#{r[:type]}"
+      puts "  #{white_color('site_name: ')}#{r[:site_name]}"
+      puts "  #{white_color('Title: ')}#{r[:title]}"
+      puts "  #{white_color('Description: ')}#{r[:description]}"
+      puts "  #{white_color('URL: ')}#{r[:url]}"
+      puts "  #{white_color('image: ')}#{r[:image]}"
     end
 
     protected
