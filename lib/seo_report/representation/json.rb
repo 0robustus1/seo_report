@@ -3,7 +3,7 @@ require "json"
 module SeoReport::Representation
   class Json < Base
     def represent
-      puts JSON(report.report)
+      puts JSON(data)
     end
   end
 end

@@ -1,48 +1,53 @@
 module SeoReport::Representation
   class Cli < Base
     def represent
-      r = report.report
-      puts "#{white_color('URL: ')}#{r[:request_url]}"
-      puts "#{white_color('Status: ')}#{color_for_code(r[:response_code])}"
-      if r[:response_code] == 200
-        provide_html_response
-      elsif r[:response_code] >= 300 && r[:response_code] < 400
-        provide_redirection_response
+      url = data[:requests].first[:request_url]
+      puts "#{white_color('URL: ')}#{url}"
+      puts "#{white_color('--------------------')}"
+      data[:requests].each do |request|
+        provide_response_data(request)
       end
     end
 
     protected
-    def provide_html_response
-      r = report.report
-      canonical =
-        if r[:canonical] == r[:request_url]
-          green_color(r[:canonical], bold: true)
-        else
-          red_color(r[:canonical], bold: true)
-        end
-      puts "#{white_color('Canonical: ')}#{canonical}"
-      puts "#{white_color('Title: ')}#{r[:title]}"
-      puts "#{white_color('Description: ')}#{r[:description]}"
-      provide_robots_response
-      provide_twitter_response
-      provide_opengraph_response
+    def provide_response_data(request)
+      code = request[:response_code]
+      puts "#{white_color('Status: ')}#{color_for_code(code)}"
+      if code == 200
+        provide_html_response(request)
+      elsif code >= 300 && code < 400
+        provide_redirection_response(request)
+      end
     end
 
-    def provide_redirection_response
-      r = report.report
-      location =
-        if r[:location] == r[:request_url]
-          red_color(r[:location], bold: true)
+    def provide_html_response(data)
+      canonical =
+        if data[:canonical] == data[:request_url]
+          green_color(data[:canonical], bold: true)
         else
-          r[:location]
+          red_color(data[:canonical], bold: true)
+        end
+      puts "#{white_color('Canonical: ')}#{canonical}"
+      puts "#{white_color('Title: ')}#{data[:title]}"
+      puts "#{white_color('Description: ')}#{data[:description]}"
+      provide_robots_response(data)
+      provide_twitter_response(data)
+      provide_opengraph_response(data)
+    end
+
+    def provide_redirection_response(data)
+      location =
+        if data[:location] == data[:request_url]
+          red_color(data[:location], bold: true)
+        else
+          data[:location]
         end
       puts "#{white_color('Location: ')}#{location}"
     end
 
-    def provide_robots_response
-      r = report.report[:robots]
-      tags = r.map(&:downcase)
-      literal_tags = r.dup
+    def provide_robots_response(data)
+      literal_tags = data[:robots].dup
+      tags = literal_tags.map(&:downcase)
       puts "#{white_color('Robots: ')}"
       no_robots_tag = tags.find { |t| t.match(/.*no(?:index|follow).*/) }
       if !tags.include?("all") && no_robots_tag
@@ -56,24 +61,24 @@ module SeoReport::Representation
       end
     end
 
-    def provide_twitter_response
-      r = report.report[:twitter]
+    def provide_twitter_response(data)
+      twitter = data[:twitter]
       puts "#{white_color('Twitter-Card: ')}"
-      puts "  #{white_color('Card: ')}#{r[:card]}"
-      puts "  #{white_color('Domain: ')}#{r[:domain]}"
-      puts "  #{white_color('Title: ')}#{r[:title]}"
-      puts "  #{white_color('Description: ')}#{r[:description]}"
+      puts "  #{white_color('Card: ')}#{twitter[:card]}"
+      puts "  #{white_color('Domain: ')}#{twitter[:domain]}"
+      puts "  #{white_color('Title: ')}#{twitter[:title]}"
+      puts "  #{white_color('Description: ')}#{twitter[:description]}"
     end
 
-    def provide_opengraph_response
-      r = report.report[:og]
+    def provide_opengraph_response(data)
+      opengraph = data[:og]
       puts "#{white_color('OpenGraph (Facebook): ')}"
-      puts "  #{white_color('type: ')}#{r[:type]}"
-      puts "  #{white_color('site_name: ')}#{r[:site_name]}"
-      puts "  #{white_color('Title: ')}#{r[:title]}"
-      puts "  #{white_color('Description: ')}#{r[:description]}"
-      puts "  #{white_color('URL: ')}#{r[:url]}"
-      puts "  #{white_color('image: ')}#{r[:image]}"
+      puts "  #{white_color('type: ')}#{opengraph[:type]}"
+      puts "  #{white_color('site_name: ')}#{opengraph[:site_name]}"
+      puts "  #{white_color('Title: ')}#{opengraph[:title]}"
+      puts "  #{white_color('Description: ')}#{opengraph[:description]}"
+      puts "  #{white_color('URL: ')}#{opengraph[:url]}"
+      puts "  #{white_color('image: ')}#{opengraph[:image]}"
     end
 
     def white(text, io = $stdout)

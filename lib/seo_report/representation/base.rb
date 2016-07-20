@@ -1,6 +1,11 @@
+require "forwardable"
+
 module SeoReport::Representation
   class Base
+    extend Forwardable
+
     attr_reader :report
+    def_delegators :report, :data
 
     def self.represent_with_report_for(url)
       report = SeoReport::Report.new(url)

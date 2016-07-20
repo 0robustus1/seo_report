@@ -2,24 +2,28 @@ require "nokogiri"
 
 module SeoReport
   class Report
-    attr_reader :start_url, :report
+    attr_reader :start_url, :data
 
     def initialize(start_url)
       @start_url = start_url
     end
 
     def produce
-      @report = generate_report
+      @data = generate_report
     end
 
     protected
     def generate_report
-      initial_request = Request.new(start_url)
-      initial_request.perform
+      chain = RequestChain.new(start_url)
+      chain.perform
       {
-        request_url: start_url,
-        response_code: initial_request.response.code.to_i
-      }.merge(generate_html_report(initial_request))
+        requests: chain.request_chain.map do |request|
+          {
+            request_url: request.url.to_s,
+            response_code: request.response.code.to_i
+          }.merge(generate_html_report(request))
+        end
+      }
     end
 
     def generate_html_report(request)
