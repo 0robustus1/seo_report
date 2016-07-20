@@ -3,7 +3,7 @@ module SeoReport::Representation
     def represent
       url = data[:requests].first[:request_url]
       puts "#{white_color('URL: ')}#{url}"
-      puts "#{white_color('--------------------')}"
+      separator
       data[:requests].each do |request|
         provide_response_data(request)
       end
@@ -12,7 +12,6 @@ module SeoReport::Representation
     protected
     def provide_response_data(request)
       code = request[:response_code]
-      puts "#{white_color('Status: ')}#{color_for_code(code)}"
       if code == 200
         provide_html_response(request)
       elsif code >= 300 && code < 400
@@ -20,33 +19,42 @@ module SeoReport::Representation
       end
     end
 
-    def provide_html_response(data)
+    def provide_html_response(request)
+      code = request[:response_code]
+      separator if multiple_requests?
+      puts "#{white_color('Status: ')}#{color_for_code(code)}"
       canonical =
-        if data[:canonical] == data[:request_url]
-          green_color(data[:canonical], bold: true)
+        if request[:canonical] == request[:request_url]
+          green_color(request[:canonical], bold: true)
         else
-          red_color(data[:canonical], bold: true)
+          red_color(request[:canonical], bold: true)
         end
       puts "#{white_color('Canonical: ')}#{canonical}"
-      puts "#{white_color('Title: ')}#{data[:title]}"
-      puts "#{white_color('Description: ')}#{data[:description]}"
-      provide_robots_response(data)
-      provide_twitter_response(data)
-      provide_opengraph_response(data)
+      puts "#{white_color('Title: ')}#{request[:title]}"
+      puts "#{white_color('Description: ')}#{request[:description]}"
+      provide_robots_response(request)
+      provide_twitter_response(request)
+      provide_opengraph_response(request)
     end
 
-    def provide_redirection_response(data)
+    def provide_redirection_response(request)
+      code = request[:response_code]
       location =
-        if data[:location] == data[:request_url]
-          red_color(data[:location], bold: true)
+        if request[:location] == request[:request_url]
+          red_color(request[:location], bold: true)
         else
-          data[:location]
+          request[:location]
         end
-      puts "#{white_color('Location: ')}#{location}"
+      if data[:requests].length > 1
+        puts "#{white_color('redirect')} with #{blue_color(code, bold: true)} to #{white_color(location)}"
+      else
+        puts "#{white_color('Status: ')}#{color_for_code(code)}"
+        puts "#{white_color('Location: ')}#{location}"
+      end
     end
 
-    def provide_robots_response(data)
-      literal_tags = data[:robots].dup
+    def provide_robots_response(request)
+      literal_tags = request[:robots].dup
       tags = literal_tags.map(&:downcase)
       puts "#{white_color('Robots: ')}"
       no_robots_tag = tags.find { |t| t.match(/.*no(?:index|follow).*/) }
@@ -61,8 +69,8 @@ module SeoReport::Representation
       end
     end
 
-    def provide_twitter_response(data)
-      twitter = data[:twitter]
+    def provide_twitter_response(request)
+      twitter = request[:twitter]
       puts "#{white_color('Twitter-Card: ')}"
       puts "  #{white_color('Card: ')}#{twitter[:card]}"
       puts "  #{white_color('Domain: ')}#{twitter[:domain]}"
@@ -70,8 +78,8 @@ module SeoReport::Representation
       puts "  #{white_color('Description: ')}#{twitter[:description]}"
     end
 
-    def provide_opengraph_response(data)
-      opengraph = data[:og]
+    def provide_opengraph_response(request)
+      opengraph = request[:og]
       puts "#{white_color('OpenGraph (Facebook): ')}"
       puts "  #{white_color('type: ')}#{opengraph[:type]}"
       puts "  #{white_color('site_name: ')}#{opengraph[:site_name]}"
@@ -79,6 +87,14 @@ module SeoReport::Representation
       puts "  #{white_color('Description: ')}#{opengraph[:description]}"
       puts "  #{white_color('URL: ')}#{opengraph[:url]}"
       puts "  #{white_color('image: ')}#{opengraph[:image]}"
+    end
+
+    def multiple_requests?
+      data[:requests].length > 1
+    end
+
+    def separator
+      puts "#{white_color('----------------------------------------')}"
     end
 
     def white(text, io = $stdout)
