@@ -20,5 +20,9 @@ module SeoReport::Representation
     def represent
       raise NotImplementedError.new("#represent needs to be implemented by a subclass.")
     end
+
+    def any_data_in_hash?(hash)
+      (hash || {}).select { |_, val| !val.nil? }.any?
+    end
   end
 end

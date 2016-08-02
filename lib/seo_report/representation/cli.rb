@@ -71,22 +71,30 @@ module SeoReport::Representation
 
     def provide_twitter_response(request)
       twitter = request[:twitter]
-      puts "#{white_color('Twitter-Card: ')}"
-      puts "  #{white_color('Card: ')}#{twitter[:card]}"
-      puts "  #{white_color('Domain: ')}#{twitter[:domain]}"
-      puts "  #{white_color('Title: ')}#{twitter[:title]}"
-      puts "  #{white_color('Description: ')}#{twitter[:description]}"
+      if any_data_in_hash?(twitter)
+        puts "#{white_color('Twitter-Card: ')}"
+        puts "  #{white_color('Card: ')}#{twitter[:card]}"
+        puts "  #{white_color('Domain: ')}#{twitter[:domain]}"
+        puts "  #{white_color('Title: ')}#{twitter[:title]}"
+        puts "  #{white_color('Description: ')}#{twitter[:description]}"
+      else
+        puts "#{white_color('Twitter-Card:')} no matching data present in response"
+      end
     end
 
     def provide_opengraph_response(request)
       opengraph = request[:og]
-      puts "#{white_color('OpenGraph (Facebook): ')}"
-      puts "  #{white_color('type: ')}#{opengraph[:type]}"
-      puts "  #{white_color('site_name: ')}#{opengraph[:site_name]}"
-      puts "  #{white_color('Title: ')}#{opengraph[:title]}"
-      puts "  #{white_color('Description: ')}#{opengraph[:description]}"
-      puts "  #{white_color('URL: ')}#{opengraph[:url]}"
-      puts "  #{white_color('image: ')}#{opengraph[:image]}"
+      if any_data_in_hash?(opengraph)
+        puts "#{white_color('OpenGraph (Facebook): ')}"
+        puts "  #{white_color('type: ')}#{opengraph[:type]}"
+        puts "  #{white_color('site_name: ')}#{opengraph[:site_name]}"
+        puts "  #{white_color('Title: ')}#{opengraph[:title]}"
+        puts "  #{white_color('Description: ')}#{opengraph[:description]}"
+        puts "  #{white_color('URL: ')}#{opengraph[:url]}"
+        puts "  #{white_color('image: ')}#{opengraph[:image]}"
+      else
+        puts "#{white_color('OpenGraph (Facebook):')} no matching data present in response"
+      end
     end
 
     def multiple_requests?
