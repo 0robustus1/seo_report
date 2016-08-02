@@ -11,8 +11,15 @@ It focuses on these aspects of seo-relevance:
 * social media data
   * twitter-cards (twitter)
   * open-graph (facebook)
+  
+## planned functionality
 
-## Installation
+* add support for structured data
+  * read in rdfa-formatted structured data
+  * read in microdata
+  * (support json-ld? (embedded and linked?))
+
+## installation
 
 Add this line to your application's Gemfile:
 
@@ -28,15 +35,17 @@ Or install it yourself as:
 
     $ gem install seo_report
 
-## Usage
+## usage
 
 * `seo-report URL`
   will provide you with a human-readable report on the command-line.
 * `seo-report --json URL`
   will provide you with json output, that is parseable by other means (like for
-  example [jq](https://stedolan.github.io/jq/)).
+  example [jq](https://stedolan.github.io/jq/)). Be aware that the json
+  format is currently not set in stone. It is most likely to change until
+  at least version *0.2.0* is reached.
 
-## Development
+## development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
 `rake spec` to run the tests. You can also run `bin/console` for an interactive
@@ -48,12 +57,15 @@ release a new version, update the version number in `version.rb`, and then run
 git commits and tags, and push the `.gem` file to
 [rubygems.org](https://rubygems.org).
 
-## Contributing
+## contributing
 
 Bug reports and pull requests are welcome on GitHub at
-https://github.com/0robustus1/seo_report.
+https://github.com/0robustus1/seo_report. If you have any ideas regarding a
+bigger feature change/addition i would recommend creating an issue before
+setting down an implementing the code for a PR. This increases the chance of it
+being merged, as it allows us to have a discussion beforehand.
 
-## License
+## license
 
 The gem is available as open source under the terms of the
 [MIT License](http://opensource.org/licenses/MIT).
