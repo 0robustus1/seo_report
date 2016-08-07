@@ -11,12 +11,12 @@ It focuses on these aspects of seo-relevance:
 * social media data
   * twitter-cards (twitter)
   * open-graph (facebook)
+* microdata (schema.org), *currently only in json output*
   
 ## planned functionality
 
 * add support for structured data
   * read in rdfa-formatted structured data
-  * read in microdata
   * (support json-ld? (embedded and linked?))
 
 ## installation
@@ -68,5 +68,6 @@ being merged, as it allows us to have a discussion beforehand.
 ## license
 
 The gem is available as open source under the terms of the
-[MIT License](http://opensource.org/licenses/MIT).
+[LGPL 3.0 License](http://choosealicense.com/licenses/lgpl-3.0/). A copy of the
+license is part of this repository in the *LICENSE* file.
 
