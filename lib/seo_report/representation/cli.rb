@@ -42,6 +42,8 @@ module SeoReport::Representation
       location =
         if request[:location] == request[:request_url]
           red_color(request[:location], bold: true)
+        elsif request[:location].start_with?("/")
+          yellow_color(request[:location], bold: true)
         else
           request[:location]
         end
@@ -109,20 +111,24 @@ module SeoReport::Representation
       io.print(white_color(text))
     end
 
-    def white_color(text, bold: true)
-      color_with_code(text, code: 37, bold: bold)
+    def red_color(text, bold: false)
+      color_with_code(text, code: 31, bold: bold)
     end
 
     def green_color(text, bold: false)
       color_with_code(text, code: 32, bold: bold)
     end
 
-    def red_color(text, bold: false)
-      color_with_code(text, code: 31, bold: bold)
+    def yellow_color(text, bold: false)
+      color_with_code(text, code: 33, bold: bold)
     end
 
     def blue_color(text, bold: false)
       color_with_code(text, code: 34, bold: bold)
+    end
+
+    def white_color(text, bold: true)
+      color_with_code(text, code: 37, bold: bold)
     end
 
     def color_with_code(text, code:, bold: false)
