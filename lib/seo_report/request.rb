@@ -6,7 +6,7 @@ module SeoReport
     class Error < ::StandardError; end
     class NoRequestPerformedYetError < Error; end
 
-    attr_reader :url, :headers
+    attr_reader :url
 
     def initialize(url, headers = {})
       @url = URI(url)
@@ -29,6 +29,12 @@ module SeoReport
 
     def response
       @response or raise NoRequestPerformedYetError.new(url)
+    end
+
+    def headers
+      {
+        "User-Agent" => "seo-report/#{SeoReport::VERSION} Net::HTTP"
+      }.merge(@headers || {})
     end
 
     protected
