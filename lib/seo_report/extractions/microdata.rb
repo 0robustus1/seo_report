@@ -12,15 +12,22 @@ module SeoReport::Extractions
       end
 
       def extract!
-        document.at_xpath('/html/body').children.each do |child|
-          process(child)
-        end
+        elements.each { |child| process(child) }
         {
           microdata: {
             elements: result_set,
             errors: errors,
           }
         }
+      end
+
+      def elements
+        body = document.at_xpath('/html/body')
+        if body
+          body.children
+        else
+          []
+        end
       end
 
       protected
