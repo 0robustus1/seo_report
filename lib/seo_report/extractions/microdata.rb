@@ -15,7 +15,12 @@ module SeoReport::Extractions
         document.at_xpath('/html/body').children.each do |child|
           process(child)
         end
-        {microdata: result_set}
+        {
+          microdata: {
+            elements: result_set,
+            errors: errors,
+          }
+        }
       end
 
       protected
@@ -50,21 +55,18 @@ module SeoReport::Extractions
       end
 
       def provide_data_for_itemprop(element)
-        data =
-          if element.name == "meta"
-            element["content"]
-          elsif %w(audio embed iframe img source track video).include?(element.name)
-            element["src"]
-          elsif %w(a area link).include?(element.name)
-            element["href"]
-          elsif element.name == "object"
-            element["data"]
-          elsif %w(data meter).include?(element.name)
-            element["value"]
-          else
-            element.text
-          end
-        current_scope[element["itemprop"]] = data
+        data = microdata_itemprop_value(element)
+        if current_scope
+          current_scope[element["itemprop"]] = data
+        else
+          error = {
+            tag: element.name,
+            itemprop: element["itemprop"],
+            value: data,
+          }
+          error.merge!(id: element["id"]) if element["id"]
+          (errors[:scopeless_elements] ||= []) << error
+        end
       end
 
       def push_scope(element)
@@ -93,6 +95,10 @@ module SeoReport::Extractions
         @result_set ||= []
       end
 
+      def errors
+        @errors ||= {}
+      end
+
       def microdata_element?(element)
         %w(itemscope itemtype itemprop).
           any? { |attr| element.has_attribute?(attr) }
@@ -104,6 +110,22 @@ module SeoReport::Extractions
 
       def microdata_prop?(element)
         element.has_attribute?("itemprop")
+      end
+
+      def microdata_itemprop_value(element)
+        if element.name == "meta"
+          element["content"]
+        elsif %w(audio embed iframe img source track video).include?(element.name)
+          element["src"]
+        elsif %w(a area link).include?(element.name)
+          element["href"]
+        elsif element.name == "object"
+          element["data"]
+        elsif %w(data meter).include?(element.name)
+          element["value"]
+        else
+          element.text
+        end
       end
     end
 
