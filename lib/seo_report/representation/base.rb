@@ -11,6 +11,13 @@ module SeoReport::Representation
       report = SeoReport::Report.new(url)
       report.produce
       new(report).represent
+    rescue StandardError => _error
+      debug = ENV["SEO_REPORT_DEBUG"]
+      if debug.to_i > 0
+        raise
+      else
+        abort("-- Sorry, something went wrong when creating the report.")
+      end
     end
 
     def initialize(report)

@@ -44,6 +44,13 @@ Or install it yourself as:
   example [jq](https://stedolan.github.io/jq/)). Be aware that the json
   format is currently not set in stone. It is most likely to change until
   at least version *0.2.0* is reached.
+  
+### environment variables
+
+Usually `seo-report` will in the case of an unrecoverable error, just provide
+a message and bug out. If you are a developer, or want to file an issue, you
+can run the command with `SEO_REPORT_DEBUG=1` set, which will provide
+backtrace information instead.
 
 ## development
 
