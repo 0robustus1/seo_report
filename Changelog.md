@@ -12,6 +12,9 @@ specific releases. It adheres to the guidelines outlined by
   failure occurs, for... well debugging.
 - Add error-integration to json/internal-struct for microdata. This allows the
   recognition and handling of errors regarding microdata in the document.
+- Specify minimum required ruby-version of **2.0.0**. It wouldn't really have
+  worked with anything less than /1.9.3/ before, but specifying it exactly makes
+  it easier to test for and to adhere to.
 ### Changed
 - Don't fail as easily when parsing microdata information. Seeing as this a
   reporting-tool, that should also display information whether something is
