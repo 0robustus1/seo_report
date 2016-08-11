@@ -11,7 +11,7 @@ module SeoReport
     end
 
     def self.extractions
-      @extractions ||= Hash.new([])
+      @extractions ||= {}
     end
 
     def initialize(start_url)
@@ -24,16 +24,22 @@ module SeoReport
 
     protected
     def generate_report
-      chain = RequestChain.new(start_url)
-      chain.perform
       {
-        requests: chain.request_chain.map do |request|
+        requests: request_chain.request_chain.map do |request|
           {
             request_url: request.url.to_s,
             response_code: request.response.code.to_i
           }.merge(generate_html_report(request))
         end
       }
+    end
+
+    def request_chain
+      @request_chain ||= build_request_chain
+    end
+
+    def build_request_chain
+      RequestChain.new(start_url).tap(&:perform)
     end
 
     def generate_html_report(request)
@@ -50,7 +56,7 @@ module SeoReport
     end
 
     def content_through_extractions(base, document, type: :html)
-      self.class.extractions[type].reduce(base) do |current, method_name|
+      self.class.extractions.fetch(type, []).reduce(base) do |current, method_name|
         current.merge(send(method_name, document))
       end
     end
