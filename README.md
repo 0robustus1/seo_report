@@ -1,5 +1,8 @@
 # SeoReport
 
+[![Build Status](https://travis-ci.org/0robustus1/seo_report.svg?branch=master)](https://travis-ci.org/0robustus1/seo_report)
+[![Gem Version](https://badge.fury.io/rb/seo_report.svg)](https://badge.fury.io/rb/seo_report)
+
 seo_report is a gem that provide a binary/executable called `seo-report`. With
 this you can get a report of seo-relevant data for pretty much any URL.
 It focuses on these aspects of seo-relevance:
