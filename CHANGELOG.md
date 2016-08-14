@@ -5,6 +5,8 @@ specific releases. It adheres to the guidelines outlined by
 [keepachangelog](http://keepachangelog.com/en/0.3.0/).
 
 ## [unreleased]
+
+## [0.1.3] — 2016-08-14
 ### Added
 - Provide error message, without internal stacktrace information when the
   command fails for unrecoverable reasons. Also introduces the
