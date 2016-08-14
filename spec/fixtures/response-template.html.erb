@@ -16,6 +16,12 @@
     <% if canonical %>
       <link rel="canonical" href="<%= canonical %>">
     <% end %>
+
+    <% if robots %>
+      <% robots.each do |robot| %>
+        <meta name="robots" content="<%= robot %>">
+      <% end %>
+    <% end %>
   </head>
   <body>
   </body>
