@@ -15,7 +15,12 @@ specific releases. It adheres to the guidelines outlined by
 - Specify minimum required ruby-version of **2.0.0**. It wouldn't really have
   worked with anything less than /1.9.3/ before, but specifying it exactly makes
   it easier to test for and to adhere to.
-### Changed
+- The starts of a real test-suite. Currrently there are only specs for the main
+  extractions, meaning SEO (canonical and robots meta) and HEAD (title and meta
+  description). But the start has been made and the test suite will grow over
+  the next releases up to 0.2.0, at which point there should be at least an 85%
+  coverage.
+### Fixed
 - Don't fail as easily when parsing microdata information. Seeing as this a
   reporting-tool, that should also display information whether something is
   valid (or *ok*) or not, we need to handle most errors in the html-document
