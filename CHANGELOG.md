@@ -5,6 +5,11 @@ specific releases. It adheres to the guidelines outlined by
 [keepachangelog](http://keepachangelog.com/en/0.3.0/).
 
 ## [unreleased]
+### Added
+- Minor changes regarding housekeeping:
+  - Cache bundler/gems on travis
+  - Add badge for travis build-jobs to README
+  - Add badge for current rubygems version to README
 
 ## [0.1.3] — 2016-08-14
 ### Added
