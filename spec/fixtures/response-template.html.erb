@@ -46,6 +46,22 @@
     <% if og_url %>
       <meta property="og:url" content="<%= og_url %>">
     <% end %>
+
+    <% if twitter_card %>
+      <meta name="twitter:card" content="<%= twitter_card %>">
+    <% end %>
+
+    <% if twitter_domain %>
+      <meta name="twitter:domain" content="<%= twitter_domain %>">
+    <% end %>
+
+    <% if twitter_title %>
+      <meta name="twitter:title" content="<%= twitter_title %>">
+    <% end %>
+
+    <% if twitter_description %>
+      <meta name="twitter:description" content="<%= twitter_description %>">
+    <% end %>
   </head>
   <body>
   </body>

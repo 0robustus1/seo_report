@@ -12,6 +12,7 @@ specific releases. It adheres to the guidelines outlined by
   - Add badge for current rubygems version to README
 - Add specs for:
   - the opengraph-data extraction
+  - the twitter-card extraction
 
 ## [0.1.3] — 2016-08-14
 ### Added
