@@ -13,6 +13,10 @@ module SeoReport
             domain: extract.call("domain"),
             title: extract.call("title"),
             description: extract.call("description"),
+            site: extract.call("site"),
+            creator: extract.call("creator"),
+            image: extract.call("image"),
+            image_alt: extract.call("image:alt"),
           }
         }
       end
