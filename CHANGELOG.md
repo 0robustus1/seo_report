@@ -10,6 +10,8 @@ specific releases. It adheres to the guidelines outlined by
   - Cache bundler/gems on travis
   - Add badge for travis build-jobs to README
   - Add badge for current rubygems version to README
+- Add specs for:
+  - the opengraph-data extraction
 
 ## [0.1.3] — 2016-08-14
 ### Added

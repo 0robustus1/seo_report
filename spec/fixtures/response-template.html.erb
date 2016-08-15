@@ -22,6 +22,30 @@
         <meta name="robots" content="<%= robot %>">
       <% end %>
     <% end %>
+
+    <% if og_type %>
+      <meta property="og:type" content="<%= og_type %>">
+    <% end %>
+
+    <% if og_title %>
+      <meta property="og:title" content="<%= og_title %>">
+    <% end %>
+
+    <% if og_description %>
+      <meta property="og:description" content="<%= og_description %>">
+    <% end %>
+
+    <% if og_site_name %>
+      <meta property="og:site_name" content="<%= og_site_name %>">
+    <% end %>
+
+    <% if og_image %>
+      <meta property="og:image" content="<%= og_image %>">
+    <% end %>
+
+    <% if og_url %>
+      <meta property="og:url" content="<%= og_url %>">
+    <% end %>
   </head>
   <body>
   </body>
