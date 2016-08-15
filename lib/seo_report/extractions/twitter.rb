@@ -2,20 +2,17 @@ module SeoReport
   module Extractions
     module Twitter
       def extract_twitter(doc)
-        card = doc.xpath('//head/meta[@name="twitter:card"]').
-               map { |node| node.attr("content") }
-        domain = doc.xpath('//head/meta[@name="twitter:domain"]').
-                 map { |node| node.attr("content") }
-        title = doc.xpath('//head/meta[@name="twitter:title"]').
-                map { |node| node.attr("content") }
-        description = doc.xpath('//head/meta[@name="twitter:description"]').
-                      map { |node| node.attr("content") }
+        extract = -> (field) do
+          result = doc.xpath(%{//head/meta[@name="twitter:#{field}"]}).
+            map { |node| node.attr("content") }
+          unarray(result)
+        end
         {
           twitter: {
-            card: unarray(card),
-            domain: unarray(domain),
-            title: unarray(title),
-            description: unarray(description),
+            card: extract.call("card"),
+            domain: extract.call("domain"),
+            title: extract.call("title"),
+            description: extract.call("description"),
           }
         }
       end
