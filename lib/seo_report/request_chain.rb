@@ -29,7 +29,7 @@ module SeoReport
     def build_new_request
       location = last_request.response["Location"]
       url = build_url(last_request.url, location).to_s
-      Request.new(url)
+      Request.new(url, headers)
     end
 
     def has_redirection_response?(request)

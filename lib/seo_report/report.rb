@@ -2,7 +2,8 @@ require "nokogiri"
 
 module SeoReport
   class Report
-    attr_reader :start_url, :data
+    attr_reader :start_url, :headers
+    attr_reader :data
 
     def self.register_extraction(type, module_name, *method_names)
       include module_name
@@ -14,8 +15,9 @@ module SeoReport
       @extractions ||= {}
     end
 
-    def initialize(start_url)
+    def initialize(start_url, headers = {})
       @start_url = start_url
+      @headers = headers
     end
 
     def produce
@@ -39,7 +41,7 @@ module SeoReport
     end
 
     def build_request_chain
-      RequestChain.new(start_url).tap(&:perform)
+      RequestChain.new(start_url, headers).tap(&:perform)
     end
 
     def generate_html_report(request)

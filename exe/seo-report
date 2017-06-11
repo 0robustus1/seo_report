@@ -5,18 +5,29 @@ require "getoptlong"
 
 options = GetoptLong.new(
   ["--json", GetoptLong::NO_ARGUMENT],
+  ["--header", "-H", GetoptLong::REQUIRED_ARGUMENT],
   ["--help", "-h", GetoptLong::NO_ARGUMENT])
 
 opts = {}
-options.each { |opt, val| opts[opt] = val }
+options.each do |opt, val|
+  if opts[opt]
+    opts[opt] = Array(opts[opt]) << val
+  else
+    opts[opt] = val
+  end
+end
 
 url = ARGV[0]
+headers = Array(opts["--header"]).each_with_object({}) do |str, coll|
+  header, value = str.split(/\s*:\s*/, 2)
+  coll[header] = value
+end
 if url.nil? || url.empty?
   abort("Please provide a url to seo-report.\nUsage: seo-report URL")
 else
   if opts["--json"]
-    SeoReport::Representation::Json.represent_with_report_for(url)
+    SeoReport::Representation::Json.represent_with_report_for(url, headers)
   else
-    SeoReport::Representation::Cli.represent_with_report_for(url)
+    SeoReport::Representation::Cli.represent_with_report_for(url, headers)
   end
 end

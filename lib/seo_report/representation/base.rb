@@ -7,8 +7,8 @@ module SeoReport::Representation
     attr_reader :report
     def_delegators :report, :data
 
-    def self.represent_with_report_for(url)
-      report = SeoReport::Report.new(url)
+    def self.represent_with_report_for(url, headers = {})
+      report = SeoReport::Report.new(url, headers)
       report.produce
       new(report).represent
     rescue StandardError => _error
