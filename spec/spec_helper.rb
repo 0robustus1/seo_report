@@ -1,4 +1,10 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+if ENV['COVERAGE'] == '1' || ENV['COVERAGE'] == 'true'
+  require 'simplecov'
+  SimpleCov.start
+end
+
 require 'seo_report'
 require "webmock/rspec"
 
