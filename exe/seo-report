@@ -17,6 +17,19 @@ options.each do |opt, val|
   end
 end
 
+if opts["--help"]
+  puts <<~HELP
+    seo-report — generate basic SEO reports of a URL
+    Usage:
+      --json, generate a JSON report. Can be used by other tools
+      --header 'HEADER string', send additional headers to the server. Each
+        header must be a field-value pair, separated by a : (colon). This flag
+        can be provided multiple times to set multiple header fields.
+      --help, print this help page
+  HELP
+  exit 2
+end
+
 url = ARGV[0]
 headers = Array(opts["--header"]).each_with_object({}) do |str, coll|
   header, value = str.split(/\s*:\s*/, 2)
